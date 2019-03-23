@@ -32,7 +32,7 @@ fn main() -> Result<(), Error> {
         .get_matches();
     let dstr1 = matches.value_of("Date1").unwrap();
     let dstr2 = matches.value_of("Date2").unwrap();
-    let improve_speed = matches.value_of("Improve Speed").unwrap().parse::<f32>()?;
+    let improve_speed = matches.value_of("Improve Speed").unwrap().parse::<f64>()?;
     let improve_days = matches.value_of("Improve Days").unwrap().parse::<i64>()?;
     
     let mut d1 = NaiveDate::parse_from_str(dstr1, "%Y-%m-%d")?;
@@ -40,13 +40,15 @@ fn main() -> Result<(), Error> {
     let start = d1.clone();
     
     let mut count = 0;
+    let mut improve = 1.0 as f64;
     loop {
         let dur1 = d2.signed_duration_since(d1);
         if (dur1.num_seconds() <= 0) {
             break;
         }
         count += 1;
-        let m99 = Duration::seconds((dur1.num_seconds() as f32*improve_speed) as i64);
+        improve *= improve_speed;
+        let m99 = Duration::seconds((dur1.num_seconds() as f64*improve) as i64);
         let d3 = d1.checked_add_signed(m99).unwrap();
         let dur2 = d3.signed_duration_since(d1);
         d1 = d1.checked_add_signed(Duration::days(improve_days)).unwrap();
@@ -58,5 +60,6 @@ fn main() -> Result<(), Error> {
     println!("start from {:?}", start);
     println!("end on from {:?}", d2);
     println!("improve count {:?}", count);
+    println!("final performance {:?}", improve);
     Ok(())
 }
