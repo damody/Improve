@@ -5,10 +5,10 @@ use failure::Error;
 use clap::{Arg, App, SubCommand};
 
 fn main() -> Result<(), Error> {
-    let matches = App::new("Html Formatter")
+    let matches = App::new("calculate your work perforce improve")
         .version("0.1.0")
         .author("damody <t1238142000@gmail.com>")
-        .about("Html Formatter written in Rust")
+        .about("for cht")
         .arg(Arg::with_name("Date1")
             .required(true)
             .takes_value(true)
