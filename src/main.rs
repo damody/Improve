@@ -41,6 +41,8 @@ fn main() -> Result<(), Error> {
     
     let mut count = 0;
     let mut improve = 1.0 as f64;
+    let dur1 = d2.signed_duration_since(d1);
+    let origin_day = dur1.num_days();
     loop {
         let dur1 = d2.signed_duration_since(d1);
         if (dur1.num_seconds() <= 0) {
@@ -48,7 +50,7 @@ fn main() -> Result<(), Error> {
         }
         count += 1;
         improve *= improve_speed;
-        let m99 = Duration::seconds((dur1.num_seconds() as f64*improve) as i64);
+        let m99 = Duration::seconds((dur1.num_seconds() as f64*improve_speed) as i64);
         let d3 = d1.checked_add_signed(m99).unwrap();
         let dur2 = d3.signed_duration_since(d1);
         d1 = d1.checked_add_signed(Duration::days(improve_days)).unwrap();
@@ -57,9 +59,12 @@ fn main() -> Result<(), Error> {
         //println!("As whole days: {:?}, {:?}", dur1.num_days(), dur2.num_days());
         //println!("Date: {:?}, {:?}", d1, d2);
     }
+    let dur2 = d2.signed_duration_since(start);
+    let final_day = dur2.num_days();
     println!("start from {:?}", start);
     println!("end on from {:?}", d2);
     println!("improve count {:?}", count);
+    println!("improve from {} days to {} days", origin_day, final_day);
     println!("final performance {:?}", improve);
     Ok(())
 }
